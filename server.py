@@ -77,7 +77,6 @@ user_validator = {
     "$jsonSchema": {
         "bsonType": "object",
         "required": [
-            "Auth0Id",
             "Username",
             "Password",         # ← added
             "WalletBalance",
@@ -138,10 +137,14 @@ except Exception as e:
     print("Error creating UserInformation collection:", e)
     exit(1)
 
-#Check if Auth0Id is unique
+# Ensure Username is unique
 try:
-    db.UserInformation.create_index("Auth0Id", unique=True)
-    print("Ensured ‘Auth0Id’ is unique via an index on UserInformation.")
+    db.UserInformation.create_index(
+        [("Username", 1)],
+        unique=True,
+        name="uniq_username"
+    )
+    print("Ensured ‘Username’ is unique via an index on UserInformation.")
 except Exception as e:
-    print("Error creating index on UserInformation.Auth0Id:", e)
+    print("Error creating unique index on UserInformation.Username:", e)
     exit(1)
