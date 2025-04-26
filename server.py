@@ -79,6 +79,7 @@ user_validator = {
         "required": [
             "Auth0Id",
             "Username",
+            "Password",         # ← added
             "WalletBalance",
             "Groups",
             "TrustScore",
@@ -87,13 +88,13 @@ user_validator = {
             "DOB"
         ],
         "properties": {
-            "Auth0Id": {
-                "bsonType": "string",
-                "description": "the Auth0 user ID (e.g. 'auth0|123…') – required and unique"
-            },
             "Username": {
                 "bsonType": "string",
                 "description": "the user’s chosen display name – required"
+            },
+            "Password": {                           # ← added
+                "bsonType": "string",
+                "description": "the user’s password hash – required"
             },
             "FirstName": {
                 "bsonType": "string",
