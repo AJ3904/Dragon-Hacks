@@ -11,6 +11,7 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.static('front-end'));
 
 // MongoDB Atlas Connection
 mongoose.connect('mongodb+srv://adlijohan5:m3FVS05RCgzs1eIs@dragonhacks.ibr5by4.mongodb.net/Database?retryWrites=true&w=majority&appName=DragonHacks')
@@ -115,7 +116,16 @@ app.post('/login', async (req, res) => {
       res.status(500).send({ message: 'Error logging in' });
     }
 });
-  
+
+app.get('/api/users', async (req, res) => {
+  try {
+    const users = await User.find({}, 'FirstName LastName Username'); // only fetch the fields you need
+    res.status(200).json(users);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({ message: 'Error fetching users' });
+  }
+});
 
 // Start Server
 const PORT = process.env.PORT || 3000;
