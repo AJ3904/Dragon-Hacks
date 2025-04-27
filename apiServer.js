@@ -72,27 +72,7 @@ apiApp.get('/api/users', authenticateToken, async (req, res) => {
 
 // Add your other API endpoints here
 // Example:
-apiApp.get('/api/user-profile', authenticateToken, async (req, res) => {
-  try {
-    const user = await User.findOne({ _id: req.user.id });
-    if (!user) {
-      return res.status(404).send({ message: 'User not found' });
-    }
-    
-    // Return user data without sensitive information
-    res.status(200).json({
-      firstName: user.FirstName,
-      lastName: user.LastName,
-      email: user.Username,
-      walletBalance: user.WalletBalance,
-      groups: user.Groups,
-      trustScore: user.TrustScore
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send({ message: 'Error fetching profile' });
-  }
-});
+
 
 // Start API Server
 const API_PORT = process.env.API_PORT || 3000;

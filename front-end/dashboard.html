@@ -287,6 +287,15 @@
 </div>
 
 <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const hash = window.location.hash;
+    if (hash && hash.includes('token=')) {
+        const token = hash.split('token=')[1];
+        localStorage.setItem('accessToken', token);
+        // Remove the token from the URL for security
+        history.replaceState(null, null, window.location.pathname);
+    }
+}); 
   let hidden = false;
   let selectedUserIds = []; // Store selected users globally
 
@@ -327,7 +336,17 @@
     userList.innerHTML = '<p>Loading users...</p>';
     
     try {
-      const response = await fetch('/api/users');
+      console.log("hello")
+      const token = localStorage.getItem('accessToken');
+      console.log(token)
+
+      const response = await fetch('http://localhost:3000/api/users', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+      });
+
       const users = await response.json();
       userList.innerHTML = '';
 

@@ -98,7 +98,9 @@
             const result = await response.json();
     
             if (response.ok) {
-                window.location.href = 'http://localhost:3000/dashboard.html';
+                localStorage.setItem('accessToken', result.accessToken);
+
+                window.location.href = `http://localhost:3000/dashboard.html#token=${result.accessToken}`;
             } else {
                 alert(result.message || 'Login failed');
             }
