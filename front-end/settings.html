@@ -66,6 +66,16 @@
       color: #555;
     }
 
+    .logout-card {
+        background-color: #fff5e6;
+        border: 2px solid #ffa500;
+        color: #ff8c00;
+    }
+      
+    .logout-card:hover {
+        box-shadow: 0 6px 10px rgba(255,165,0,0.3);
+    }
+      
     .delete-account-card {
       background-color: #ffe5e5;
       border: 2px solid #ff4d4d;
@@ -156,6 +166,12 @@
     <p>Control your preferences and notifications.</p>
   </div>
 
+  <!-- LOGOUT BUTTON -->
+  <div class="card logout-card" onclick="logout()">
+    <h2>Logout</h2>
+    <p>Sign out of your account securely.</p>
+  </div>
+
   <div class="card delete-account-card" onclick="openModal('delete')">
     <h2>Delete Account</h2>
     <p>Delete your account permanently.</p>
@@ -170,89 +186,141 @@
 </div>
 
 <script>
-function openModal(section) {
-  const modal = document.getElementById('modal');
-  const content = document.getElementById('modal-content');
-
-  let html = '';
-
-  switch(section) {
-    case 'profile':
-      html = `
-        <h3>Update Profile</h3>
-        <input type="text" placeholder="First Name"><br><br>
-        <input type="text" placeholder="Last Name"><br><br>
-        <input type="email" placeholder="Email"><br><br>
-        <input type="tel" placeholder="Phone Number"><br><br>
-        <input type="password" placeholder="Reset Password"><br><br>
-        <button class="close-btn" onclick="closeModal()">Save Changes</button>
-      `;
-      break;
-
-    case 'trust':
-      html = `
-        <h3>Trust Score</h3>
-        <p>Your Trust Score behaves similarly to a Credit Score.</p>
-        <p>It is calculated based on your payment history, loan repayments, group participation, and app engagement.</p>
-        <canvas id="trustChart" style="max-width: 100%; height: 200px;"></canvas>
-        <p style="margin-top:10px;">Current Score: <strong>750</strong></p>
-        <button class="close-btn" onclick="closeModal()">Close</button>
-      `;
-      break;
-
-    case 'payment':
-      html = `
-        <h3>Manage Payment Options</h3>
-        <p>Linked Accounts:</p>
-        <ul>
-          <li>Visa **** 1234</li>
-          <li>Bank of America **** 5678</li>
-        </ul>
-        <button class="close-btn" onclick="closeModal()">Close</button>
-      `;
-      break;
-
-    case 'wallet':
-      html = `
-        <h3>My Wallet</h3>
-        <p>Balance: $150.00</p>
-        <p>Recent Transactions:</p>
-        <ul>
-          <li>Deposit: +$100</li>
-          <li>Loan Payment: -$50</li>
-        </ul>
-        <button class="close-btn" onclick="closeModal()">Close</button>
-      `;
-      break;
-
-    case 'settings':
-      html = `
-        <h3>Settings</h3>
-        <p>Notification Preferences:</p>
-        <input type="checkbox" checked> Email Alerts<br><br>
-        <input type="checkbox"> SMS Notifications<br><br>
-        <button class="close-btn" onclick="closeModal()">Save Settings</button>
-      `;
-      break;
-
-    case 'delete':
-      html = `
-        <h3 style="color: #d9534f;">Delete Account</h3>
-        <p>Are you sure you want to permanently delete your account? This action cannot be undone.</p>
-        <button class="close-btn" onclick="closeModal()">Cancel</button>
-        <br><br>
-        <button class="close-btn" style="background-color: #d9534f;" onclick="alert('Account Deleted (not really)')">Delete Account</button>
-      `;
-      break;
-  }
-
-  content.innerHTML = html;
-  modal.style.display = 'flex';
-
-  if (section === 'trust') {
-    setTimeout(drawTrustChart, 100); // slight delay to allow canvas to render
-  }
-}
+    function openModal(section) {
+        const modal = document.getElementById('modal');
+        const content = document.getElementById('modal-content');
+      
+        let html = '';
+      
+        switch(section) {
+          case 'profile':
+            html = `
+              <h3>Update Profile</h3>
+              <div style="display: flex; gap: 10px;">
+                <input type="text" placeholder="First Name" style="flex:1;">
+                <input type="text" placeholder="Last Name" style="flex:1;">
+              </div><br>
+              <input type="email" placeholder="Email" style="width: 100%;"><br><br>
+              <input type="tel" placeholder="Phone Number" style="width: 100%;"><br><br>
+              <input type="password" placeholder="Reset Password" style="width: 100%;"><br><br>
+              <button class="close-btn" onclick="closeModal()">Save Changes</button>
+            `;
+            break;
+      
+          case 'trust':
+            html = `
+              <h3>Trust Score</h3>
+              <p>Your Trust Score behaves similarly to a Credit Score.</p>
+              <p>It is calculated based on your payment history, loan repayments, group participation, and app engagement.</p>
+              <canvas id="trustChart" style="max-width: 100%; height: 200px;"></canvas>
+              <p style="margin-top:10px;">Current Score: <strong>750</strong></p>
+              <button class="close-btn" onclick="closeModal()">Close</button>
+            `;
+            break;
+      
+          case 'payment':
+            html = `
+              <h3>Manage Payment Options</h3>
+              <div style="text-align: left;">
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0;">
+                  <span>Mustafa's Chase ****1234 <strong style="color: green;">(Default)</strong></span> <img src="https://img.icons8.com/color/24/000000/visa.png" alt="Visa">
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0;">
+                  <span>Mustafa's PNC ****0000</span> <img src="https://img.icons8.com/color/24/000000/mastercard-logo.png" alt="Mastercard">
+                </div>
+                <button class="close-btn" style="background-color: #28a745;" onclick="alert('Add New Account Flow')">+ Add New Bank Account</button>
+              </div>
+              <p style="font-size: 0.8rem; margin-top: 10px;">*Click an account to set as default.</p>
+            `;
+            break;
+      
+            case 'wallet':
+            html = `
+              <h3>My Wallet</h3>
+              <div style="overflow-x:auto;">
+                <table style="width:100%; border-collapse: collapse;">
+                  <thead style="background:#0077b6; color:white;">
+                    <tr>
+                      <th style="padding:8px;">Date</th>
+                      <th style="padding:8px;">Type</th>
+                      <th style="padding:8px;">Bank Account</th>
+                      <th style="padding:8px;">Fund Circle</th>
+                      <th style="padding:8px;">Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style="background:white;">
+                      <td style="padding:8px;">04/25/2025</td>
+                      <td style="padding:8px;">Deposit</td>
+                      <td style="padding:8px;">Chase</td>
+                      <td style="padding:8px;">-</td>
+                      <td style="padding:8px;">+$100.00</td>
+                    </tr>
+                    <tr style="background:#f1f1f1;">
+                      <td style="padding:8px;">04/20/2025</td>
+                      <td style="padding:8px;">Loan</td>
+                      <td style="padding:8px;">PNC</td>
+                      <td style="padding:8px;">College Friends</td>
+                      <td style="padding:8px;">+$50.00</td>
+                    </tr>
+                    <tr style="background:white;">
+                      <td style="padding:8px;">04/15/2025</td>
+                      <td style="padding:8px;">Withdrawn</td>
+                      <td style="padding:8px;">Chase</td>
+                      <td style="padding:8px;">High School Friends</td>
+                      <td style="padding:8px;">-$30.00</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div style="margin-top:20px; background:#e0f7fa; padding:15px; border-radius:10px;">
+                <strong>Current Balance: $120.00</strong>
+              </div>
+              <button class="close-btn" onclick="closeModal()">Close</button>
+            `;
+            break;          
+      
+          case 'settings':
+            html = `
+              <h3>Settings</h3>
+              <div style="text-align: left; margin-bottom: 20px;">
+                <label style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                  Email Alerts
+                  <input type="checkbox" style="transform: scale(1.2);">
+                </label>
+                <label style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                  SMS Notifications
+                  <input type="checkbox" style="transform: scale(1.2);">
+                </label>
+                <label style="display: flex; align-items: center; justify-content: space-between;">
+                  App Updates
+                  <input type="checkbox" style="transform: scale(1.2);" checked>
+                </label>
+              </div>
+              <button class="close-btn" onclick="closeModal()">Save Settings</button>
+            `;
+            break;
+      
+          case 'delete':
+            html = `
+              <h3 style="color: #d9534f;">Delete Account</h3>
+              <p style="color: red; font-weight: bold;">Disclaimer:</p>
+              <p style="color: red;">You cannot delete your account if you owe someone a balance.  
+              <br>If you don't owe any balance, your group funds will be refunded to your default payment method within 3-5 business days.</p>
+              <button class="close-btn" onclick="closeModal()">Cancel</button>
+              <br><br>
+              <button class="close-btn" style="background-color: #d9534f;" onclick="alert('Account Deleted (not really)')">Delete Account</button>
+            `;
+            break;
+        }
+      
+        content.innerHTML = html;
+        modal.style.display = 'flex';
+      
+        if (section === 'trust') {
+          setTimeout(drawTrustChart, 100); // Chart.js for Trust Score
+        }
+      }
 
 function closeModal(event) {
   if (!event || event.target.id === 'modal') {
@@ -285,6 +353,10 @@ function drawTrustChart() {
       }
     }
   });
+}
+
+function logout() {
+    window.location.href = "index.html";
 }
 </script>
 
