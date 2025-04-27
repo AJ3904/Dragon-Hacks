@@ -245,7 +245,7 @@
       <span id="wallet-amount">$2,500</span>
       <span class="eye" id="eye" onclick="toggleBalances()">&#128065;</span> <!-- Eye icon inside wallet -->
     </div>
-    <div class="profile-icon">M</div> <!-- Placeholder Initial -->
+    <div class="profile-icon" onclick="goToSettings()">M</div>
   </div>
 </header>
 
@@ -452,6 +452,11 @@ newGroupCard.onclick = () => {
   
     // (Optional: reset fields if you want)
   }    
+
+  function goToSettings() {
+      window.location.href = "settings.html";
+  }
+  
 </script>
 
 <!-- Create Group Modal -->
