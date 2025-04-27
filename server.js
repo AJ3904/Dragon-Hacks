@@ -1,9 +1,13 @@
+require('dotenv').config()
 // server.js
 
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const jwt = require("jsonwebtoken")
+
+
 
 // Create app
 const app = express();
@@ -12,6 +16,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static('front-end'));
+app.use(express.json())
 
 // MongoDB Atlas Connection
 mongoose.connect('mongodb+srv://adlijohan5:m3FVS05RCgzs1eIs@dragonhacks.ibr5by4.mongodb.net/Database?retryWrites=true&w=majority&appName=DragonHacks')
@@ -109,7 +114,12 @@ app.post('/login', async (req, res) => {
       }
   
       // If we get here, login is successful
-      res.status(200).send({ message: 'Login successful' });
+      const userName = req.body.email
+      const passWord = req.body.password
+      const payload = { email: userName, password: passWord }
+
+      const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET)
+      return res.status(200).json({ accessToken: accessToken });
   
     } catch (err) {
       console.error(err);
@@ -117,7 +127,7 @@ app.post('/login', async (req, res) => {
     }
 });
 
-app.get('/api/users', async (req, res) => {
+app.get('/api/users',authenticateToken, async (req, res) => {
   try {
     const users = await User.find({}, 'FirstName LastName Username'); // only fetch the fields you need
     res.status(200).json(users);
@@ -126,6 +136,18 @@ app.get('/api/users', async (req, res) => {
     res.status(500).send({ message: 'Error fetching users' });
   }
 });
+
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers['authorization']
+  const token = authHeader && authHeader.split(' ')[1]
+  if (token == null) return res.sendStatus(401)
+
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403)
+    req.user = user
+    next()
+  })
+};
 
 // Start Server
 const PORT = process.env.PORT || 3000;

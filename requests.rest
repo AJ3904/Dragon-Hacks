@@ -1,0 +1,11 @@
+GET http://localhost:3000/api/users
+
+
+###
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "email": "luongdminh183@gmail.com",
+    "password": "Octane1834hn"
+}
