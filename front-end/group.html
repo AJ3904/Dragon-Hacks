@@ -191,7 +191,7 @@
       background-color: #f94144;
       color: white;
     }
-    /* Modal styling */
+    
     .modal {
       display: none;
       position: fixed;
@@ -234,11 +234,11 @@
     <header>
         <div class="header-left">
           <a href="dashboard.html" class="back-button">&#8592;</a>
-          <h1>CrowdSave Dashboard</h1>
+          <h1>Trust Circle | Your Groups</h1>
         </div>
         <div class="header-right">
           <div class="wallet">
-            <span id="wallet-amount">$2,500</span>
+            <span id="wallet-amount">$500</span>
             <span class="eye" id="eye" onclick="toggleBalances()">&#128065;</span>
           </div>
           <div class="profile-icon">M</div>
@@ -248,7 +248,7 @@
       <div class="container">
       
         <div class="group-name">
-          <h2>Family Circle</h2>
+          <h2>Roommates</h2>
         </div>
       
         <div class="circle-wrapper" id="circle">
@@ -294,7 +294,6 @@
       
       </div>
       
-      <!-- Modal -->
       <div class="modal" id="loan-modal">
         <div class="modal-content">
           <input type="text" id="reason" placeholder="Reason" required>
@@ -315,21 +314,25 @@
             wallet.innerText = '****';
             pool.innerText = '****';
           } else {
-            wallet.innerText = '$2,500';
+            wallet.innerText = '$500';
             pool.innerText = groupData ? groupData.poolSize : '$7,500';
           }
         }
       
-        // --- New code for loading group data dynamically ---
-      
-        const groupData = JSON.parse(localStorage.getItem('groupData'));
+        const groupData = {
+          name: 'Roommates',
+          poolSize: '$7,500',
+          members: ['MB', 'AJ', 'NL', 'HC', 'HW']
+        };
+        localStorage.setItem('groupData', JSON.stringify(groupData));
+        
       
         if (groupData) {
           document.querySelector('.group-name h2').innerText = groupData.name;
           document.getElementById('total-pool').innerText = groupData.poolSize;
       
           const container = document.getElementById('circle');
-          // Clear any existing members
+        
           container.querySelectorAll('.member').forEach(m => m.remove());
       
           const radius = 150;
@@ -345,11 +348,9 @@
             container.appendChild(member);
           });
       
-          // Clear loan requests table initially
           document.getElementById('loan-body').innerHTML = '';
         }
       
-        // --- Modal functionality for loan request ---
         function openModal() {
           document.getElementById('loan-modal').style.display = 'flex';
           const today = new Date();
