@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>User Settings - CrowdSave</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #f9fafb;
+      color: #212529;
+    }
+
+    header {
+      background-color: #0077b6;
+      color: white;
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    .back-button {
+      color: white;
+      text-decoration: none;
+      font-size: 1.2rem;
+    }
+
+    .container {
+      padding: 30px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      box-shadow: 0 6px 10px rgba(0,0,0,0.08);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      font-size: 1.3rem;
+      color: #0077b6;
+    }
+
+    .card p {
+      margin: 10px 0 0 0;
+      font-size: 0.95rem;
+      color: #555;
+    }
+
+    .delete-account-card {
+      background-color: #ffe5e5;
+      border: 2px solid #ff4d4d;
+      color: #d9534f;
+    }
+
+    .delete-account-card:hover {
+      box-shadow: 0 6px 10px rgba(255,77,77,0.3);
+    }
+
+    /* Popup Modal Styling */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 500px;
+      width: 90%;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+
+    .modal-content h3 {
+      margin-top: 0;
+      font-size: 1.4rem;
+      color: #0077b6;
+    }
+
+    .close-btn {
+      margin-top: 20px;
+      background: #0077b6;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .close-btn:hover {
+      background: #005f8f;
+    }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<header>
+  <a href="dashboard.html" class="back-button">&larr; Back</a>
+  <h1>User Settings</h1>
+</header>
+
+<div class="container">
+  <div class="card" onclick="openModal('profile')">
+    <h2>Profile</h2>
+    <p>Update your personal information and password.</p>
+  </div>
+
+  <div class="card" onclick="openModal('trust')">
+    <h2>Trust Score</h2>
+    <p>See your trust score and how it is calculated.</p>
+  </div>
+
+  <div class="card" onclick="openModal('payment')">
+    <h2>Payment Options</h2>
+    <p>Manage your saved payment methods.</p>
+  </div>
+
+  <div class="card" onclick="openModal('wallet')">
+    <h2>My Wallet</h2>
+    <p>View your balance and transactions.</p>
+  </div>
+
+  <div class="card" onclick="openModal('settings')">
+    <h2>Settings</h2>
+    <p>Control your preferences and notifications.</p>
+  </div>
+
+  <div class="card delete-account-card" onclick="openModal('delete')">
+    <h2>Delete Account</h2>
+    <p>Delete your account permanently.</p>
+  </div>
+</div>
+
+<!-- Modal -->
+<div id="modal" class="modal" onclick="closeModal(event)">
+  <div class="modal-content" id="modal-content">
+    <!-- dynamic content -->
+  </div>
+</div>
+
+<script>
+function openModal(section) {
+  const modal = document.getElementById('modal');
+  const content = document.getElementById('modal-content');
+
+  let html = '';
+
+  switch(section) {
+    case 'profile':
+      html = `
+        <h3>Update Profile</h3>
+        <input type="text" placeholder="First Name"><br><br>
+        <input type="text" placeholder="Last Name"><br><br>
+        <input type="email" placeholder="Email"><br><br>
+        <input type="tel" placeholder="Phone Number"><br><br>
+        <input type="password" placeholder="Reset Password"><br><br>
+        <button class="close-btn" onclick="closeModal()">Save Changes</button>
+      `;
+      break;
+
+    case 'trust':
+      html = `
+        <h3>Trust Score</h3>
+        <p>Your Trust Score behaves similarly to a Credit Score.</p>
+        <p>It is calculated based on your payment history, loan repayments, group participation, and app engagement.</p>
+        <canvas id="trustChart" style="max-width: 100%; height: 200px;"></canvas>
+        <p style="margin-top:10px;">Current Score: <strong>750</strong></p>
+        <button class="close-btn" onclick="closeModal()">Close</button>
+      `;
+      break;
+
+    case 'payment':
+      html = `
+        <h3>Manage Payment Options</h3>
+        <p>Linked Accounts:</p>
+        <ul>
+          <li>Visa **** 1234</li>
+          <li>Bank of America **** 5678</li>
+        </ul>
+        <button class="close-btn" onclick="closeModal()">Close</button>
+      `;
+      break;
+
+    case 'wallet':
+      html = `
+        <h3>My Wallet</h3>
+        <p>Balance: $150.00</p>
+        <p>Recent Transactions:</p>
+        <ul>
+          <li>Deposit: +$100</li>
+          <li>Loan Payment: -$50</li>
+        </ul>
+        <button class="close-btn" onclick="closeModal()">Close</button>
+      `;
+      break;
+
+    case 'settings':
+      html = `
+        <h3>Settings</h3>
+        <p>Notification Preferences:</p>
+        <input type="checkbox" checked> Email Alerts<br><br>
+        <input type="checkbox"> SMS Notifications<br><br>
+        <button class="close-btn" onclick="closeModal()">Save Settings</button>
+      `;
+      break;
+
+    case 'delete':
+      html = `
+        <h3 style="color: #d9534f;">Delete Account</h3>
+        <p>Are you sure you want to permanently delete your account? This action cannot be undone.</p>
+        <button class="close-btn" onclick="closeModal()">Cancel</button>
+        <br><br>
+        <button class="close-btn" style="background-color: #d9534f;" onclick="alert('Account Deleted (not really)')">Delete Account</button>
+      `;
+      break;
+  }
+
+  content.innerHTML = html;
+  modal.style.display = 'flex';
+
+  if (section === 'trust') {
+    setTimeout(drawTrustChart, 100); // slight delay to allow canvas to render
+  }
+}
+
+function closeModal(event) {
+  if (!event || event.target.id === 'modal') {
+    const modal = document.getElementById('modal');
+    modal.style.display = 'none';
+  }
+}
+
+function drawTrustChart() {
+  const ctx = document.getElementById('trustChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+      datasets: [{
+        label: 'Trust Score',
+        data: [650, 670, 700, 720, 740, 750],
+        borderColor: '#0077b6',
+        backgroundColor: 'rgba(0, 119, 182, 0.1)',
+        fill: true,
+        tension: 0.4
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          min: 600,
+          max: 800
+        }
+      }
+    }
+  });
+}
+</script>
+
+</body>
+</html>
