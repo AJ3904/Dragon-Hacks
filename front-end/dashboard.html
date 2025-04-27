@@ -239,11 +239,11 @@
 <body>
 
 <header>
-  <h1>CrowdSave | Dashboard </h1>
+  <h1>Trust Circle | Dashboard </h1>
   <div class="header-right">
     <div class="wallet">
-      <span id="wallet-amount">$2,500</span>
-      <span class="eye" id="eye" onclick="toggleBalances()">&#128065;</span> <!-- Eye icon inside wallet -->
+      <span id="wallet-amount">$500</span>
+      <span class="eye" id="eye" onclick="toggleBalances()">&#128065;</span> 
     </div>
     <div class="profile-icon" onclick="goToSettings()">M</div>
   </div>
@@ -268,21 +268,21 @@
     <button class="create-group-btn" onclick="openModal()">Create New Group</button>
   </div>
 
-  <!-- <div class="group-card">
+  <div class="group-card">
     <div>
-      <h3>Family Circle</h3>
-      <p>Total Pool: <span class="pool-amount">$7,500</span> | Members: 5</p>
+      <h3>Roommates</h3>
+      <p>Total Pool: <span class="pool-amount">$7,500</span> | Members: 4</p>
     </div>
-    <button class="request-loan-btn">Request Loan</button>
+    <button class="request-loan-btn" onclick="goToGroup()">View Group</button>
   </div>
 
   <div class="group-card">
     <div>
-      <h3>College Buddies</h3>
-      <p>Total Pool: <span class="pool-amount">$3,000</span> | Members: 4</p>
+      <h3>College Bachelors</h3>
+      <p>Total Pool: <span class="pool-amount">$3,000</span> | Members: 6</p>
     </div>
-    <button class="request-loan-btn">Request Loan</button>
-  </div> -->
+    <button class="request-loan-btn" onclick="goToGroup()">View Group</button>
+  </div>
 
 </div>
 
@@ -292,12 +292,11 @@
     if (hash && hash.includes('token=')) {
         const token = hash.split('token=')[1];
         localStorage.setItem('accessToken', token);
-        // Remove the token from the URL for security
         history.replaceState(null, null, window.location.pathname);
     }
 }); 
   let hidden = false;
-  let selectedUserIds = []; // Store selected users globally
+  let selectedUserIds = []; 
 
   function toggleBalances() {
     hidden = !hidden;
@@ -310,27 +309,22 @@
       nextContributionAmount.innerText = '****';
       poolAmounts.forEach(el => el.innerText = '****');
     } else {
-      wallet.innerText = '$2,500';
+      wallet.innerText = '$500';
       nextContributionAmount.innerText = '$100 pending';
       poolAmounts[0].innerText = '$7,500';
       poolAmounts[1].innerText = '$3,000';
     }
   }
 
-  // --- MODAL FUNCTIONS ---
-
-  // Open the modal and load users
   function openModal() {
     document.getElementById('groupModal').style.display = 'block';
     fetchUsers();
   }
 
-  // Close the first user selection modal
   function closeModal() {
     document.getElementById('groupModal').style.display = 'none';
   }
 
-  // Fetch users from the server
   async function fetchUsers() {
     const userList = document.getElementById('userList');
     userList.innerHTML = '<p>Loading users...</p>';
@@ -367,7 +361,6 @@
     }
   }
 
-  // Search/filter users
   function filterUsers() {
     const input = document.getElementById('searchInput').value.toLowerCase();
     const userItems = document.querySelectorAll('.user-item');
@@ -382,7 +375,6 @@
     });
   }
 
-  // After selecting users → move to second modal
   function createGroup() {
     selectedUserIds = Array.from(document.querySelectorAll('.user-item input:checked'))
                             .map(cb => cb.value);
@@ -392,14 +384,11 @@
       return;
     }
 
-    // Close first modal
     closeModal();
 
-    // Open second modal
     document.getElementById('groupInfoModal').style.display = 'block';
   }
 
-  // Close the second modal (group info)
   function closeGroupInfoModal() {
     document.getElementById('groupInfoModal').style.display = 'none';
   }
@@ -424,11 +413,8 @@
     console.log('Grace Period:', gracePeriodValue, gracePeriodUnit);
     console.log('Selected Users:', selectedUserIds);
   
-    // --- Now dynamically add the new group to the dashboard
-  
     const groupsContainer = document.querySelector('.container');
     
-    // Create the group card element
     const newGroupCard = document.createElement('div');
 newGroupCard.className = 'group-card';
 newGroupCard.innerHTML = `
@@ -436,13 +422,11 @@ newGroupCard.innerHTML = `
     <h3>${groupName}</h3>
     <p>Total Pool: <span class="pool-amount">$0</span> | Members: ${selectedUserIds.length + 1}</p>
   </div>
-  <button class="request-loan-btn">Request Loan</button>
+  <button class="request-loan-btn" onclick="goToGroup()">View Group</button>
 `;
 
-// Add click handler to save group info and redirect
 newGroupCard.onclick = () => {
   const selectedUsersInitials = selectedUserIds.map(id => {
-    // Assume you fetched the full user list earlier
     const user = window.allUsers.find(u => u._id === id);
     if (user) {
       return (user.FirstName[0] + user.LastName[0]).toUpperCase();
@@ -450,7 +434,7 @@ newGroupCard.onclick = () => {
     return '??';
   });
 
-  selectedUsersInitials.push('XZ'); // Hardcode current user's initials
+  selectedUsersInitials.push('XZ');
 
   const groupData = {
     name: groupName,
@@ -462,23 +446,23 @@ newGroupCard.onclick = () => {
   window.location.href = 'group.html';
 };
   
-    // Insert the new group card **after the last existing group**
     const lastGroupsHeader = document.querySelector('.groups-header');
     lastGroupsHeader.insertAdjacentElement('afterend', newGroupCard);
   
-    // Close the group info modal
     closeGroupInfoModal();
   
-    // (Optional: reset fields if you want)
   }    
 
   function goToSettings() {
       window.location.href = "settings.html";
   }
+
+  function goToGroup() {
+    window.location.href = "group.html";
+}
   
 </script>
 
-<!-- Create Group Modal -->
 <div id="groupModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">Create New Group</div>
@@ -494,7 +478,6 @@ newGroupCard.onclick = () => {
   </div>
 </div>
 
-<!-- Group Information Modal -->
 <div id="groupInfoModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">Group Details</div>
