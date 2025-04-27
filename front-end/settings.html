@@ -86,7 +86,6 @@
       box-shadow: 0 6px 10px rgba(255,77,77,0.3);
     }
 
-    /* Popup Modal Styling */
     .modal {
       display: none;
       position: fixed;
@@ -166,7 +165,6 @@
     <p>Control your preferences and notifications.</p>
   </div>
 
-  <!-- LOGOUT BUTTON -->
   <div class="card logout-card" onclick="logout()">
     <h2>Logout</h2>
     <p>Sign out of your account securely.</p>
@@ -178,10 +176,8 @@
   </div>
 </div>
 
-<!-- Modal -->
 <div id="modal" class="modal" onclick="closeModal(event)">
   <div class="modal-content" id="modal-content">
-    <!-- dynamic content -->
   </div>
 </div>
 
@@ -318,7 +314,7 @@
         modal.style.display = 'flex';
       
         if (section === 'trust') {
-          setTimeout(drawTrustChart, 100); // Chart.js for Trust Score
+          setTimeout(drawTrustChart, 100);
         }
       }
 
