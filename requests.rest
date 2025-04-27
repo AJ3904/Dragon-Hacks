@@ -1,11 +1,12 @@
-GET http://localhost:3000/api/users
-
-
-###
-POST http://localhost:3000/login
+POST http://localhost:4000/login
 Content-Type: application/json
 
 {
-    "email": "luongdminh183@gmail.com",
-    "password": "Octane1834hn"
+  "email": "luongdminh183@gmail.com",
+  "password": "Octane1834hn"
 }
+
+###
+
+GET http://localhost:3000/api/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGQ2MDBlMjhkYzEzMjI0OWIwM2ZhOSIsImVtYWlsIjoibHVvbmdkbWluaDE4M0BnbWFpbC5jb20iLCJpYXQiOjE3NDU3Mjc0NDgsImV4cCI6MTc0NTgxMzg0OH0.bMFeEWOgHyA5j4H1cx5w8Pu2B-NXxklX_5CHPPbsook
